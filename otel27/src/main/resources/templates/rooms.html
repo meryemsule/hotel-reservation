@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Önerilen Oda</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/rooms.css}" />
+    <style>
+        .personality-result {
+            background: #f8f9fa;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .recommended-room {
+            border: 2px solid #4CAF50;
+            background: #e8f5e9;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+        }
+        .recommendation-badge {
+            background: #4CAF50;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+        .room img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+        .reserve-button {
+            display: inline-block;
+            background: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        .reserve-button:hover {
+            background: #45a049;
+        }
+        .back-button {
+            display: inline-block;
+            background: #666;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .back-button:hover {
+            background: #555;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav>
+    <a href="/home">Ana sayfa</a>
+    <a href="/rooms">Odaları Görüntüle</a>
+
+    <!-- Kullanıcı Durumu -->
+    <div style="float: right;">
+        <span th:if="${session.loggedInUser != null}">
+            Hoşgeldin, <b th:text="${session.loggedInUser}"></b>!
+            <a th:href="@{/logout}" style="margin-left: 10px;">Çıkış Yap</a>
+        </span>
+        <span th:if="${session.loggedInUser == null}">
+            <a th:href="@{/login}">Giriş Yap</a> | <a th:href="@{/register}">Kayıt Ol</a>
+        </span>
+    </div>
+</nav>
+
+<div class="container">
+    <!-- Kişilik Testi Sonucu ve Önerilen Oda -->
+    <div th:if="${recommendedRoom}" class="content">
+        <div class="personality-result">
+            <h2>🎯 Kişilik Analizi Sonucunuz</h2>
+            <p th:text="${personalityMessage}"></p>
+        </div>
+
+        <div class="recommended-room">
+            <span class="recommendation-badge">Size Özel Önerimiz</span>
+            <h2 th:text="${recommendedRoom.name}"></h2>
+            <img th:if="${recommendedRoom.roomPictureName}"
+                 th:src="@{'/images/rooms/' + ${recommendedRoom.roomPictureName}}"
+                 alt="Room Image" />
+            <p>Fiyat: <span th:text="${recommendedRoom.price}"></span> TRY</p>
+            <p>Oda Boyutu: <span th:text="${recommendedRoom.size}"></span> Kişilik</p>
+            <p>Uygunluk: <span th:text="${recommendedRoom.available ? 'Evet' : 'Hayır'}"></span></p>
+            <a th:href="@{'/reserve?roomId=' + ${recommendedRoom.id}}" class="reserve-button">Rezervasyon Yap</a>
+        </div>
+
+        <a href="/rooms" class="back-button">Tüm Odaları Görüntüle</a>
+    </div>
+
+    <!-- Normal Oda Listesi -->
+    <div th:unless="${recommendedRoom}">
+        <h2>Tüm Odalarımız</h2>
+        <div th:each="room : ${rooms}" class="room">
+            <h3 th:text="${room.name}"></h3>
+            <img th:if="${room.roomPictureName}"
+                 th:src="@{'/images/rooms/' + ${room.roomPictureName}}"
+                 alt="Room Image" />
+            <p>Fiyat: <span th:text="${room.price}"></span> TRY</p>
+            <p>Oda Boyutu: <span th:text="${room.size}"></span> Kişilik</p>
+            <p>Uygunluk: <span th:text="${room.available ? 'Evet' : 'Hayır'}"></span></p>
+            <a th:href="@{'/reserve?roomId=' + ${room.id}}" class="reserve-button">Rezervasyon Yap</a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Kişilik Testi - Renkli Rüyalar Oteli</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/home.css}" />
+    <style>
+        .test-container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .question {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .option {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .option:hover {
+            background: #f5f5f5;
+        }
+        .submit-btn {
+            background: #4CAF50;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+        .submit-btn:hover {
+            background: #45a049;
+        }
+    </style>
+</head>
+<body>
+<!-- Navbar -->
+<nav>
+    <div class="navbar-container">
+        <a href="/home" class="logo">Renkli Rüyalar Oteli</a>
+        <div class="nav-links">
+            <a href="/rooms">Odaları Görüntüle</a>
+            <a href="/cancel-reservation" class="cancel-button">Rezervasyonu İptal Et</a>
+        </div>
+        <div class="user-actions">
+                <span th:if="${session.loggedInUser != null}">
+                    Hoşgeldin, <b th:text="${session.loggedInUser}"></b>!
+                    <a th:href="@{/logout}" class="logout-button">Çıkış Yap</a>
+                </span>
+            <span th:if="${session.loggedInUser == null}">
+                    <a th:href="@{/login}" class="auth-button">Login</a>
+                    <a th:href="@{/register}" class="auth-button">Kayıt Ol</a>
+                </span>
+        </div>
+    </div>
+</nav>
+
+<div class="test-container">
+    <h1>Size En Uygun Odayı Bulalım</h1>
+    <p>Aşağıdaki soruları cevaplayarak size en uygun odayı bulmanıza yardımcı olalım.</p>
+
+    <form action="/find-room" method="post">
+        <div class="question">
+            <h3>1. Tatil tarzınızı nasıl tanımlarsınız?</h3>
+            <div class="options">
+                <label class="option">
+                    <input type="radio" name="vacationStyle" value="luxury" required>
+                    Lüks ve konfor odaklı - Lüks Suit Oda
+                </label>
+                <label class="option">
+                    <input type="radio" name="vacationStyle" value="vintage">
+                    Nostaljik ve romantik - Vintage Odası
+                </label>
+                <label class="option">
+                    <input type="radio" name="vacationStyle" value="tropical">
+                    Egzotik ve macera dolu - Tropik Oda
+                </label>
+                <label class="option">
+                    <input type="radio" name="vacationStyle" value="sky">
+                    Sakin ve huzur dolu - Gökyüzü Odası
+                </label>
+                <label class="option">
+                    <input type="radio" name="vacationStyle" value="overthink">
+                    Düşünceli ve detaycı - Overthink Odası
+                </label>
+                <label class="option">
+                    <input type="radio" name="vacationStyle" value="aquarium">
+                    Doğa ve su sever - Akvaryum Odası
+                </label>
+                <label class="option">
+                    <input type="radio" name="vacationStyle" value="winter">
+                    Soğuk ve huzurlu - Kış Odası
+                </label>
+            </div>
+        </div>
+
+        <div class="question">
+            <h3>2. Hangi renk paleti size daha çok hitap ediyor?</h3>
+            <div class="options">
+                <label class="option">
+                    <input type="radio" name="colorPreference" value="warm" required>
+                    Sıcak renkler - Vintage Odası önerilir (Kırmızı, Turuncu, Kahverengi)
+                </label>
+                <label class="option">
+                    <input type="radio" name="colorPreference" value="cool">
+                    Soğuk renkler - Gökyüzü Odası önerilir (Mavi, Yeşil, Mor)
+                </label>
+                <label class="option">
+                    <input type="radio" name="colorPreference" value="neutral">
+                    Nötr renkler - Lüks Suit Oda önerilir (Bej, Gri, Beyaz)
+                </label>
+            </div>
+        </div>
+
+        <div class="question">
+            <h3>3. Nasıl bir atmosfer arıyorsunuz?</h3>
+            <div class="options">
+                <label class="option">
+                    <input type="radio" name="atmosphere" value="modern" required>
+                    Modern ve şık - Lüks Suit Oda önerilir
+                </label>
+                <label class="option">
+                    <input type="radio" name="atmosphere" value="cozy">
+                    Sıcak ve samimi - Vintage Odası önerilir
+                </label>
+                <label class="option">
+                    <input type="radio" name="atmosphere" value="natural">
+                    Doğal ve ferah - Tropik Oda önerilir
+                </label>
+            </div>
+        </div>
+
+        <button type="submit" class="submit-btn">Bana Uygun Odayı Bul</button>
+    </form>
+</div>
+</body>
+</html>
